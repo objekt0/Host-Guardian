@@ -43,10 +43,6 @@ Remember, "it's just for learning," so if there is any problem with the code, pl
 ## 📌 Project Status
 This project is considered **feature-complete** and is no longer under active development.
 
-## 🧠 Lessons Learned
-- Practical ARP attack techniques and defenses
-- Host-based enforcement vs network-based security
-- Reliability considerations in defensive tooling
 
 ## 📄 License
 MIT
