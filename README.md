@@ -62,10 +62,7 @@ This script runs on the machine you want to protect (e.g., your Windows Laptop).
 - Does not protect against attacks beyond Layer 2
 - Requires administrator/root privileges
 
-## 📌 Project Status
-This project is considered **feature-complete** and is no longer under active development.
-
-##iamges:
+##📸iamges:
 ![Host Guardian GUI](GUI.png)
 ![Host Guardian in work](inwork.png)
 ![Host Guardian Attack detector](AttackDetector.png)
