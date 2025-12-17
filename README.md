@@ -66,9 +66,9 @@ This script runs on the machine you want to protect (e.g., your Windows Laptop).
 This project is considered **feature-complete** and is no longer under active development.
 
 ##iamges:
-![Host Guardian GUI](GUI.jpg)
+![Host Guardian GUI](GUI.png)
 ![Host Guardian in work](inwork.png)
-![Host Guardian Attack detector](Attack]etector.jpg)
+![Host Guardian Attack detector](AttackDetector.png)
 
 
 ## 📄 License
