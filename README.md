@@ -21,6 +21,28 @@ Remember, "it's just for learning," so if there is any problem with the code, pl
 -Administrator / Root Privileges** (Required for ARP table modification)
 -python Scapy library
 
+## 🚀 How to Run 
+### 1️⃣ Running Host Guardian (The Protection Tool)
+This script runs on the machine you want to protect (e.g., your Windows Laptop).
+
+#### Windows:
+1.  Open **Command Prompt (CMD)** or PowerShell as **Administrator** (Right-click -> Run as Administrator).
+2.  Navigate to the project folder:
+    ```cmd
+    cd path\to\Host-Guardian\folder
+    ```
+3.  Run the script:
+    ```cmd
+    python HostGuardian.py
+    ```
+
+#### 🐧 Linux (Kali / Ubuntu)
+1.  Open Terminal.
+2.  Run with `sudo`:
+    ```bash
+    sudo python3 HostGuardian.py
+    ```
+
 ## ⚙️ How It Works
 1. Discovers the default gateway using OS routing tables
 2. Resolves the gateway MAC via ARP
