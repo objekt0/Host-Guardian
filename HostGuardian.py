@@ -1,12 +1,4 @@
 #!/usr/bin/env python3
-"""
-🛡️ Host Guardian - v3.0 (Self-Healing & Hardened)
-Features:
-- Auto Discovery
-- Static ARP Locking (Linux/Windows)
-- Safe-Rollback (Watchdog)
-- Periodic Refresh (Hardening)
-"""
 
 from scapy.all import sniff, ARP, conf, Ether, srp, getmacbyip, get_if_list
 import os
@@ -22,12 +14,11 @@ from datetime import datetime
 
 def get_default_interface():
     """
-    تحديد كرت الشبكة المتصل بالإنترنت تلقائياً
+    Automatically detect the network card connected to the internet.
     """
-    target = "8.8.8.8"  # سيرفر جوجل (للتجربة فقط)
-    
+    target = "8.8.8.8"  
     try:
-        # 1. معرفة الآي بي المحلي المستخدم للإنترنت
+          
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect((target, 80))
         local_ip = s.getsockname()[0]
@@ -35,27 +26,24 @@ def get_default_interface():
         
         print(f"[AUTO] Local IP detected: {local_ip}")
 
-        # 2. البحث عن اسم الواجهة التي تحمل هذا الآي بي
         if platform.system() == "Windows":
             from scapy.arch.windows import get_windows_if_list
             
-            # Scapy يجلب قائمة بكل الكروت في الويندوز
             interfaces = get_windows_if_list()
             for iface in interfaces:
-                # نبحث داخل الكرت هل يحتوي على الآي بي الخاص بنا؟
+                
                 if "ips" in iface and local_ip in iface["ips"]:
-                    # في ويندوز نحتاج "Connection Name" مثل Wi-Fi
+                    
                     return iface["name"]
                     
         else:
-            # في لينكس الوضع أسهل، Scapy يحددها تلقائياً
+            
             return conf.iface
 
     except Exception as e:
         print(f"[ERROR] Auto-select failed: {e}")
         return None
 
-# ════════════ CONFIGURATION ════════════
 CONFIG = {
     "mode": "enforce",          # 'enforce' (Lock & Block) or 'monitor' (Log only)
     "refresh_interval": 30,     # Seconds to re-apply lock (Hardening)
@@ -65,7 +53,6 @@ CONFIG = {
 }
 # ═══════════════════════════════════════
 
-# إعداد اللوجينج
 logging.basicConfig(
     filename=CONFIG["log_file"],
     level=logging.INFO,
@@ -101,11 +88,11 @@ class HostGuardian:
         self.start_time = None
 
     def clear_screen(self):
-        """مسح الشاشة"""
+        """clearing the screen"""
         os.system('cls' if self.os_type == 'Windows' else 'clear')
 
     def print_banner(self):
-        """طباعة بانر البرنامج"""
+        """Print program banner"""
         banner = f"""
 {Colors.CYAN}{Colors.BOLD}
     ╔///////////////////////////////////////////////////////////////////////////////////////////////╗
@@ -117,12 +104,12 @@ class HostGuardian:
     ║                        {Colors.WHITE}██║  ██║╚██████╔╝███████║   ██║   {Colors.CYAN}          ║
     ║                        {Colors.WHITE}╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝   {Colors.CYAN}          ║
     ║                                                                                               ║
-    ║      {Colors.GREEN}██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗ ██╗ █████╗ ███╗   ██╗{Colors.CYAN} ║
+    ║      {Colors.GREEN}██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗ ██╗ █████╗ ███╗   ██╗{Colors.CYAN}║
     ║     {Colors.GREEN}██╔════╝ ██║   ██║██╔══██╗██╔══██╗██╔══██╗██║██╔══██╗████╗  ██║{Colors.CYAN}║
     ║     {Colors.GREEN}██║  ███╗██║   ██║███████║██████╔╝██║  ██║██║███████║██╔██╗ ██║{Colors.CYAN}║
     ║     {Colors.GREEN}██║   ██║██║   ██║██╔══██║██╔══██╗██║  ██║██║██╔══██║██║╚██╗██║{Colors.CYAN}║
     ║     {Colors.GREEN}╚██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝██║██║  ██║██║ ╚████║{Colors.CYAN}║
-    ║      {Colors.GREEN}╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝{Colors.CYAN} ║
+    ║     {Colors.GREEN}╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝{Colors.CYAN} ║
     ║                                                                                               ║
     ╠///////////////////////////////////////////////////////////////////////////////////////////////╣
     ║  {Colors.YELLOW}🛡️  ARP Spoofing Protection System  v{self.VERSION}{Colors.CYAN}              ║
@@ -132,13 +119,13 @@ class HostGuardian:
         print(banner)
 
     def print_section(self, title, icon="▶"): 
-        """طباعة عنوان قسم"""
+        
         print(f"\n{Colors.CYAN}{'─'*60}{Colors.ENDC}")
         print(f"{Colors.BOLD}{Colors.BLUE}  {icon} {title}{Colors.ENDC}")
         print(f"{Colors.CYAN}{'─'*60}{Colors.ENDC}")
 
     def print_status(self, label, value, status="info"):
-        """طباعة حالة بتنسيق جميل"""
+        
         colors = {
             "info": Colors.CYAN,
             "success": Colors.GREEN,
@@ -149,7 +136,7 @@ class HostGuardian:
         print(f"  {Colors.DIM}├─{Colors.ENDC} {Colors.WHITE}{label}:{Colors.ENDC} {color}{value}{Colors.ENDC}")
 
     def print_box(self, message, box_type="info"):
-        """طباعة رسالة في صندوق"""
+        
         colors = {
             "info": (Colors.BLUE, "ℹ"),
             "success": (Colors.GREEN, "✓"),
@@ -164,7 +151,7 @@ class HostGuardian:
         print(f"  {color}╰{'─'*width}╯{Colors.ENDC}\n")
 
     def log(self, type, message):
-        """دالة مساعدة للطباعة والتسجيل معاً"""
+        
         timestamp = datetime.now().strftime("%H:%M:%S")
         if type == "INFO":
             print(f"  {Colors.DIM}[{timestamp}]{Colors.ENDC} {Colors.GREEN}✓ {message}{Colors.ENDC}")
@@ -177,18 +164,17 @@ class HostGuardian:
     def auto_discovery(self):
         self.print_section("Network Auto-Discovery", "🔍")
         try:
-            # 1. تحديد كرت الشبكة
+            
             if not self.interface:
                 self.interface = conf.iface
             
-            # 2. تحديد IP الراوتر
             self.gateway_ip = conf.route.route("0.0.0.0")[2]
             
             self.print_status("Gateway IP", self.gateway_ip, "info")
             self.print_status("Interface", self.interface, "info")
             self.print_status("OS Type", self.os_type, "info")
 
-            # 3. الحل الجذري (Windows Native ARP)
+            
             print(f"\n  {Colors.YELLOW}⏳ Updating ARP table...{Colors.ENDC}")
             param = '-n' if self.os_type == 'Windows' else '-c'
             subprocess.run(['ping', param, '1', self.gateway_ip], stdout=subprocess.DEVNULL)
@@ -202,7 +188,7 @@ class HostGuardian:
             else:
                 self.gateway_mac = getmacbyip(self.gateway_ip)
 
-            # التحقق النهائي
+            
             if self.gateway_mac:
                 self.print_status("Gateway MAC", self.gateway_mac, "success")
                 self.print_box("Network Discovery Complete!", "success")
@@ -222,7 +208,7 @@ class HostGuardian:
             sys.exit(1)
 
     def check_connection(self):
-        """فحص سريع للاتصال (Ping)"""
+        """ (Ping)"""
         param = '-n' if self.os_type == 'Windows' else '-c'
         res = subprocess.call(
             ['ping', param, '1', self.gateway_ip], 
@@ -232,7 +218,7 @@ class HostGuardian:
         return res == 0
 
     def manage_lock(self, action="lock"):
-        """تطبيق أو إزالة القفل (Enforcement Logic)"""
+        """(Enforcement Logic)"""
         if CONFIG["mode"] != "enforce" and action == "lock":
             return
 
@@ -268,7 +254,7 @@ class HostGuardian:
             logging.error(f"Lock Operation Failed: {e}")
 
     def watchdog_loop(self):
-        """العملية الخلفية: Refresh + Safe Rollback"""
+        """ Refresh + Safe Rollback"""
         while self.running:
             is_connected = self.check_connection()
 
@@ -298,7 +284,7 @@ class HostGuardian:
                 self.attack_count += 1
                 print(f"\n{Colors.BG_RED}{Colors.WHITE}{Colors.BOLD}")
                 print(f"  ╔══════════════════════════════════════════════════════════╗")
-                print(f"  ║ 🚨 ARP SPOOFING ATTACK DETECTED! #{self.attack_count:<20}║")
+                print(f"  ║    ARP SPOOFING ATTACK DETECTED! #{self.attack_count:<20}║")
                 print(f"  ╠══════════════════════════════════════════════════════════╣")
                 print(f"  ║  Attacker MAC : {sender_mac:<40}                         ║")
                 print(f"  ║  Claiming IP  : {sender_ip:<40}                          ║")
@@ -308,7 +294,7 @@ class HostGuardian:
                 logging.warning(f"SPOOFING DETECTED! Attacker: {sender_mac}")
 
     def print_active_status(self):
-        """طباعة حالة البرنامج النشطة"""
+       
         mode_color = Colors.GREEN if CONFIG["mode"] == "enforce" else Colors.YELLOW
         mode_icon = "🔒" if CONFIG["mode"] == "enforce" else "👁️"
         safe_status = "ON" if CONFIG["safe_mode"] else "OFF"
@@ -330,22 +316,20 @@ class HostGuardian:
     def start(self):
         self.start_time = datetime.now()
         
-        # مسح الشاشة وطباعة البانر
         self.clear_screen()
         self.print_banner()
         
-        # تهيئة
         self.auto_discovery()
         
-        # تشغيل الـ Watchdog في Thread منفصل
+        
         wd_thread = threading.Thread(target=self.watchdog_loop, daemon=True)
         wd_thread.start()
         
-        # طباعة حالة الحماية
+    
         self.print_active_status()
         
         try:
-            # التعديل الضروري: تحديد الكرت الذي اكتشفناه سابقاً
+
             sniff(filter="arp", prn=self.process_packet, store=0, iface=self.interface)
         except KeyboardInterrupt:
             print(f"\n{Colors.CYAN}{'═'*60}{Colors.ENDC}")
@@ -364,7 +348,7 @@ class HostGuardian:
             sys.exit(0)
 
 if __name__ == "__main__":
-    # التحقق من الصلاحيات
+    
     try:
         is_admin = os.getuid() == 0
     except AttributeError:
@@ -379,4 +363,5 @@ if __name__ == "__main__":
         sys.exit(1)
 
     guardian = HostGuardian()
+
     guardian.start()
