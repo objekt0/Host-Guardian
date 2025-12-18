@@ -1,5 +1,9 @@
 🛡️ Host Guardian
 
+🔗Page Badges
+![License](https://img.shields.io/github/license/objekt0/Host-Guardian)
+![Releases](https://img.shields.io/github/v/release/objekt0/Host-Guardian)
+
 A self-healing, host-based network protection agent designed to prevent ARP spoofing and Layer 2 Man-in-the-Middle (MITM) attacks.
 
 🔍 Overview
