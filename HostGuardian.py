@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#This code was written by objekt0
 
 from scapy.all import sniff, ARP, conf, Ether, srp, getmacbyip, get_if_list
 import os
@@ -75,7 +75,7 @@ class Colors:
     BG_BLUE = '\033[44m'
 
 class HostGuardian:
-    VERSION = "3.0"
+    VERSION = "2.0"
     
     def __init__(self):
         self.os_type = platform.system()
@@ -365,3 +365,4 @@ if __name__ == "__main__":
     guardian = HostGuardian()
 
     guardian.start()
+
