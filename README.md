@@ -1,6 +1,7 @@
 🛡️ Host Guardian
 
 🔗Page Badges
+
 ![Releases](https://github.com/objekt0/Host-Guardian/releases/tag/v2.0)
 
 ![License](https://github.com/objekt0/Host-Guardian/blob/main/LICENSE)
